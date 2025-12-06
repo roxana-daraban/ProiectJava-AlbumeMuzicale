@@ -1,0 +1,44 @@
+# ===========================================
+# APPLICATION CONFIGURATION TEMPLATE
+# ===========================================
+# INSTRUCȚIUNI:
+# 1. Copiază acest fișier ca "application.properties"
+# 2. Completează valorile reale (parole, etc.)
+# 3. NU comita niciodată application.properties real!
+# ===========================================
+
+# Application Name
+spring.application.name=music-album-manager
+
+# ===========================================
+# DATABASE CONFIGURATION
+# ===========================================
+# Înlocuiește YOUR_PASSWORD cu parola ta MySQL
+# Înlocuiește YOUR_USERNAME cu utilizatorul MySQL (de obicei "root")
+spring.datasource.url=jdbc:mysql://localhost:3306/music_album_db
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=YOUR_PASSWORD
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# ===========================================
+# JPA / HIBERNATE CONFIGURATION
+# ===========================================
+# update: actualizează schema automat la pornire
+# create: recreează schema la fiecare pornire (ȘTERGE DATE!)
+# validate: doar validează schema (pentru producție)
+# none: nu face nimic
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+# ===========================================
+# SERVER CONFIGURATION
+# ===========================================
+server.port=8080
+
+# ===========================================
+# CORS CONFIGURATION (pentru React frontend)
+# ===========================================
+# Vom configura CORS în SecurityConfig ulterior
+

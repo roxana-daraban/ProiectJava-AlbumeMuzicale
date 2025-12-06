@@ -1,1 +1,122 @@
-.idea
+# ===========================================
+# ROOT .gitignore - Music Album Manager Project
+# ===========================================
+
+# ===========================================
+# SENSITIVE FILES - NEVER COMMIT THESE!
+# ===========================================
+# Fișierele cu credențiale (parole MySQL, API keys, etc.)
+# Trebuie să folosești application.properties.template sau .env.local
+**/application.properties
+**/application-dev.properties
+**/application-prod.properties
+*.env
+*.env.local
+*.env.production
+*.key
+*.pem
+*.p12
+
+# ===========================================
+# BACKEND (Spring Boot / Maven)
+# ===========================================
+backend/**/target/
+backend/**/!.mvn/wrapper/maven-wrapper.jar
+backend/**/.mvn/wrapper/maven-wrapper.properties
+backend/**/*.class
+backend/**/*.jar
+backend/**/*.war
+backend/**/*.ear
+backend/**/HELP.md
+
+# Maven
+backend/**/.mvn/
+backend/**/mvnw
+backend/**/mvnw.cmd
+
+# ===========================================
+# FRONTEND (React / Node / Vite)
+# ===========================================
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.vite/
+frontend/build/
+frontend/.cache/
+
+# Logs
+frontend/**/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+
+# ===========================================
+# IDE / EDITOR FILES
+# ===========================================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Eclipse
+.classpath
+.project
+.settings/
+.factorypath
+
+# NetBeans
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# ===========================================
+# OPERATING SYSTEM FILES
+# ===========================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ===========================================
+# TEMPORARY FILES
+# ===========================================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+*.bak
+*.cache
+
+# ===========================================
+# PACKAGE MANAGER LOCK FILES (Optional)
+# ===========================================
+# Deși package-lock.json și pom.xml sunt ok de comitat,
+# dacă vrei să le ignorezi, decomentează:
+# frontend/package-lock.json
+# frontend/yarn.lock
+# frontend/pnpm-lock.yaml
