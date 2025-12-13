@@ -4,6 +4,7 @@ import com.albums.musicalbummanager.entity.Album;
 import com.albums.musicalbummanager.service.AlbumService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,12 +20,14 @@ public class AlbumController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'EDITOR', 'ADMIN')")
     public ResponseEntity<List<Album>> getAllAlbums() {
         List<Album> albums = albumService.findAll();
         return ResponseEntity.ok(albums);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'EDITOR', 'ADMIN')")
     public ResponseEntity<Album> getAlbumById(@PathVariable Long id) {
         return albumService.findById(id)
                 .map(album -> ResponseEntity.ok(album))
@@ -32,12 +35,14 @@ public class AlbumController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('EDITOR', 'ADMIN')")
     public ResponseEntity<Album> createAlbum(@RequestBody Album album) {
         Album savedAlbum = albumService.save(album);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAlbum);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('EDITOR', 'ADMIN')")
     public ResponseEntity<Album> updateAlbum(@PathVariable Long id, @RequestBody Album album) {
         album.setId(id);
         try {
@@ -49,6 +54,7 @@ public class AlbumController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('EDITOR', 'ADMIN')")
     public ResponseEntity<Void> deleteAlbum(@PathVariable Long id) {
         if (albumService.findById(id).isPresent()) {
             albumService.deleteById(id);
