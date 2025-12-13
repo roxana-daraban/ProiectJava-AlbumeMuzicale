@@ -18,14 +18,12 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
-    // GET all albums
     @GetMapping
     public ResponseEntity<List<Album>> getAllAlbums() {
         List<Album> albums = albumService.findAll();
         return ResponseEntity.ok(albums);
     }
 
-    // GET album by id
     @GetMapping("/{id}")
     public ResponseEntity<Album> getAlbumById(@PathVariable Long id) {
         return albumService.findById(id)
@@ -33,14 +31,12 @@ public class AlbumController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST create new album
     @PostMapping
     public ResponseEntity<Album> createAlbum(@RequestBody Album album) {
         Album savedAlbum = albumService.save(album);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAlbum);
     }
 
-    // PUT update album
     @PutMapping("/{id}")
     public ResponseEntity<Album> updateAlbum(@PathVariable Long id, @RequestBody Album album) {
         album.setId(id);
@@ -52,7 +48,6 @@ public class AlbumController {
         }
     }
 
-    // DELETE album
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAlbum(@PathVariable Long id) {
         if (albumService.findById(id).isPresent()) {
