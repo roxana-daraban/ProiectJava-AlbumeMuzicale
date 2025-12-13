@@ -13,7 +13,6 @@ const Register = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    role: 'USER',
   });
 
   const [error, setError] = useState<string>('');
@@ -97,25 +96,6 @@ const Register = () => {
               required
             />
           </div>
-
-          <div className="form-group">
-            <label htmlFor="role" className="form-label">
-              Rol
-            </label>
-            <select
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              disabled={loading}
-              className="form-select"
-              required
-            >
-              <option value="USER">USER - Vizualizare albume</option>
-              <option value="EDITOR">EDITOR - Gestionare albume</option>
-            </select>
-          </div>
-
           <button
             type="submit"
             disabled={loading}

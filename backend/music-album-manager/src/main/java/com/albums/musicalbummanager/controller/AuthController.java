@@ -35,30 +35,27 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         try {
-            // Creăm utilizatorul nou
+            // Creăm user cu rolul default "USER"
             User user = userService.createUser(
                     request.getUsername(),
                     request.getPassword(),
-                    request.getRole()
+                    "USER"  // Rol fix "USER" pentru toți utilizatorii noi
             );
 
-            // Generăm token pentru utilizatorul nou
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            // Load user pentru a genera token
+            UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
             String token = jwtUtils.generateToken(userDetails);
 
-            // Returnăm răspuns cu token
-            AuthResponse response = new AuthResponse(token, user.getUsername(), user.getRole());
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    new AuthResponse(token, user.getUsername(), user.getRole())
+            );
         } catch (RuntimeException e) {
-            // Dacă utilizatorul există deja sau altă eroare
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error: " + e.getMessage());
+            // Username deja existent
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {

@@ -3,6 +3,8 @@ package com.albums.musicalbummanager.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "albums")
 @Getter
@@ -39,4 +41,20 @@ public class Album {
 
     @Column(name = "image_url", length = 500)
     private String imageUrl;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
+    public Album(String title, String artist, String genre, Integer releaseYear,
+                 String recordLabel, BigDecimal price, Integer stock, String imageUrl, Long userId) {
+        this.title = title;
+        this.artist = artist;
+        this.genre = genre;
+        this.releaseYear = releaseYear;
+        this.recordLabel = recordLabel;
+        this.price = price;
+        this.stock = stock;
+        this.imageUrl = imageUrl;
+        this.userId = userId;
+    }
 }

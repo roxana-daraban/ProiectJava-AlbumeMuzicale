@@ -1,5 +1,6 @@
 package com.albums.musicalbummanager.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -13,15 +14,11 @@ public class RegisterRequest {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    @NotBlank(message = "Role is required")
-    private String role; // ROLE_USER, ROLE_EDITOR, ROLE_ADMIN
-
     public RegisterRequest() {}
 
-    public RegisterRequest(String username, String password, String role) {
+    public RegisterRequest(String username, String password) {
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
     public String getUsername() {
@@ -38,13 +35,5 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }
