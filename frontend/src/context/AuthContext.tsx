@@ -4,6 +4,7 @@ import { authService } from '../services/authService';
 import type { LoginRequest, RegisterRequest } from '../types';
 
 interface User {
+  id: number;
   username: string;
   role: string;
 }
@@ -38,8 +39,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       username: response.username,
       role: response.role,
       token: response.token,
+      userId: response.userId,
     });
-    setUser({ username: response.username, role: response.role });
+    setUser({ id: response.userId, username: response.username, role: response.role });
   };
 
   const register = async (userData: RegisterRequest) => {
@@ -48,8 +50,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       username: response.username,
       role: response.role,
       token: response.token,
+      userId: response.userId,
     });
-    setUser({ username: response.username, role: response.role });
+    setUser({ id: response.userId, username: response.username, role: response.role });
   };
 
   const logout = () => {

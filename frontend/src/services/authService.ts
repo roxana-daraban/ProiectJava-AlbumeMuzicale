@@ -31,13 +31,13 @@ export const authService = {
   },
 
   // Salvează datele utilizatorului
-  saveUser(user: { username: string; role: string; token: string }): void {
+  saveUser(user: { username: string; role: string; token: string; userId: number }): void {
     localStorage.setItem('token', user.token);
-    localStorage.setItem('user', JSON.stringify({ username: user.username, role: user.role }));
+    localStorage.setItem('user', JSON.stringify({ id: user.userId, username: user.username, role: user.role }));
   },
 
   // Obține datele utilizatorului
-  getUser(): { username: string; role: string } | null {
+  getUser(): { id: number; username: string; role: string } | null {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
   },

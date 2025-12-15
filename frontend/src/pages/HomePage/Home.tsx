@@ -1,6 +1,7 @@
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
+import AlbumList from '../../components/AlbumList/AlbumList';
 
 /**
  * Componenta Home - pagina principală după autentificare
@@ -32,9 +33,7 @@ const Home = () => {
       </div>
 
       <div className="home-content">
-        <h2>Pagina principală</h2>
-        <p>Aici vor apărea albumele în următorii pași.</p>
-        <p>Rolul tău: <strong>{user?.role}</strong></p>
+      <AlbumList />
       </div>
     </div>
   );

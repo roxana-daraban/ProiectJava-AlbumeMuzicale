@@ -9,6 +9,7 @@ export interface Album {
     price?: number;
     stock?: number;
     imageUrl?: string;
+    userId?: number; // ID-ul utilizatorului care a creat albumul (setat automat în backend)
   }
   
   // Types pentru User
@@ -34,6 +35,7 @@ export interface Album {
     token: string;
     username: string;
     role: string;
+    userId: number;
   }
   
   // Types pentru Update Role

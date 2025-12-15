@@ -44,7 +44,7 @@ public class AlbumController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('USER') or hasRole('EDITOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'EDITOR', 'ADMIN')")
     public ResponseEntity<Album> createAlbum(@Valid @RequestBody Album album) {
         // Obținem ID-ul utilizatorului autentificat
         Long currentUserId = getCurrentUserId();
@@ -59,7 +59,9 @@ public class AlbumController {
         User currentUser = userService.findById(currentUserId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if ("USER".equals(currentUser.getRole())) {
+        // Verificăm rolul fără prefixul "ROLE_" (poate fi "USER" sau "ROLE_USER")
+        String role = normalizeRole(currentUser.getRole());
+        if ("USER".equals(role)) {
             // Promovăm user-ul la EDITOR
             currentUser.setRole("EDITOR");
             userService.updateUser(currentUser);
@@ -69,7 +71,7 @@ public class AlbumController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('EDITOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('EDITOR', 'ADMIN')")
     public ResponseEntity<Album> updateAlbum(@PathVariable Long id, @Valid @RequestBody Album albumDetails) {
         Album existingAlbum = albumService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Album not found"));
@@ -79,29 +81,20 @@ public class AlbumController {
         User currentUser = userService.findById(currentUserId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // DEBUG: Logăm valorile pentru debugging
-        System.out.println("DEBUG updateAlbum:");
-        System.out.println("  - Album ID: " + id);
-        System.out.println("  - Album userId: " + existingAlbum.getUserId());
-        System.out.println("  - Current userId: " + currentUserId);
-        System.out.println("  - Current user role: " + currentUser.getRole());
-        System.out.println("  - Is admin: " + "ADMIN".equals(currentUser.getRole()));
-        System.out.println("  - Is owner: " + existingAlbum.getUserId().equals(currentUserId));
+        // Verificăm rolul normalizat (fără prefixul "ROLE_")
+        String role = normalizeRole(currentUser.getRole());
+        boolean isAdmin = "ADMIN".equals(role);
+        
+        // Verificăm ownership (null-safe comparison)
+        boolean isOwner = existingAlbum.getUserId() != null && 
+                         Objects.equals(existingAlbum.getUserId(), currentUserId);
 
         // Verificăm permisiunile:
         // - ADMIN poate edita orice album
         // - EDITOR poate edita doar propriile albume
-        boolean isAdmin = "ADMIN".equals(currentUser.getRole());
-        boolean isOwner = existingAlbum.getUserId() != null && existingAlbum.getUserId().equals(currentUserId);
-
-        System.out.println("  - Final check - isAdmin: " + isAdmin + ", isOwner: " + isOwner);
-
         if (!isAdmin && !isOwner) {
-            System.out.println("  - ACCESS DENIED: Not admin and not owner");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
-        System.out.println("  - ACCESS GRANTED: Updating album...");
 
         // Actualizăm câmpurile
         existingAlbum.setTitle(albumDetails.getTitle());
@@ -117,12 +110,11 @@ public class AlbumController {
         // (userId rămâne același - albumul rămâne al celui care l-a creat)
 
         Album updatedAlbum = albumService.save(existingAlbum);
-        System.out.println("  - Album updated successfully");
         return ResponseEntity.ok(updatedAlbum);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('EDITOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('EDITOR', 'ADMIN')")
     public ResponseEntity<Void> deleteAlbum(@PathVariable Long id) {
         Album album = albumService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Album not found"));
@@ -132,10 +124,18 @@ public class AlbumController {
         User currentUser = userService.findById(currentUserId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // Verificăm rolul normalizat (fără prefixul "ROLE_")
+        String role = normalizeRole(currentUser.getRole());
+        boolean isAdmin = "ADMIN".equals(role);
+        
+        // Verificăm ownership (null-safe comparison)
+        boolean isOwner = album.getUserId() != null && 
+                         Objects.equals(album.getUserId(), currentUserId);
+
         // Verificăm permisiunile:
         // - ADMIN poate șterge orice album
         // - EDITOR poate șterge doar propriile albume
-        if (!"ADMIN".equals(currentUser.getRole()) && !album.getUserId().equals(currentUserId)) {
+        if (!isAdmin && !isOwner) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -154,5 +154,20 @@ public class AlbumController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return user.getId();
+    }
+
+    /**
+     * Normalizează rolul eliminând prefixul "ROLE_" dacă există.
+     * De exemplu: "ROLE_ADMIN" -> "ADMIN", "ADMIN" -> "ADMIN"
+     */
+    private String normalizeRole(String role) {
+        if (role == null || role.isEmpty()) {
+            return "USER"; // Default
+        }
+        // Eliminăm prefixul "ROLE_" dacă există
+        if (role.startsWith("ROLE_")) {
+            return role.substring(5); // "ROLE_ADMIN" -> "ADMIN"
+        }
+        return role;
     }
 }

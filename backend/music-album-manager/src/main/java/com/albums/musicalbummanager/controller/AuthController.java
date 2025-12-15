@@ -49,7 +49,7 @@ public class AuthController {
             String token = jwtUtils.generateToken(userDetails);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(
-                    new AuthResponse(token, user.getUsername(), user.getRole())
+                    new AuthResponse(token, user.getUsername(), user.getRole(), user.getId())
             );
         } catch (RuntimeException e) {
             // Username deja existent
@@ -76,7 +76,7 @@ public class AuthController {
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             // Returnăm răspuns cu token
-            AuthResponse response = new AuthResponse(token, user.getUsername(), user.getRole());
+            AuthResponse response = new AuthResponse(token, user.getUsername(), user.getRole(), user.getId());
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
