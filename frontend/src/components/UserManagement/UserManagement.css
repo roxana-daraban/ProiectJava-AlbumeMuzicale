@@ -1,0 +1,256 @@
+.user-management {
+  padding: 2rem;
+}
+
+.user-management-header {
+  margin-bottom: 2rem;
+}
+
+.user-management-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.users-table-container {
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table thead {
+  background-color: #f8f9fa;
+}
+
+.users-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #dee2e6;
+  font-size: 14px;
+}
+
+.users-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 14px;
+  color: #333;
+}
+
+.users-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.users-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Badge-uri pentru roluri */
+.role-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.role-badge.admin {
+  background-color: #dc3545;
+  color: white;
+}
+
+.role-badge.editor {
+  background-color: #fbbf24;
+  color: #333;
+}
+
+.role-badge.user {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Badge pentru status */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.enabled {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-badge.disabled {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Acțiuni user */
+.user-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-edit-role,
+.btn-delete-user {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-edit-role {
+  background-color: #fbbf24;
+  color: #333;
+}
+
+.btn-edit-role:hover {
+  background-color: #f59e0b;
+}
+
+.btn-delete-user {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete-user:hover {
+  background-color: #c82333;
+}
+
+/* Editare rol */
+.role-edit {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.role-select {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-save-role,
+.btn-cancel-role {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-save-role {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-save-role:hover {
+  background-color: #218838;
+}
+
+.btn-cancel-role {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-cancel-role:hover {
+  background-color: #5a6268;
+}
+
+.no-users {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Modal confirmare ștergere (folosim stiluri similare cu AlbumList) */
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.delete-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.delete-modal h3 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.delete-modal p {
+  margin: 0 0 20px 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.delete-modal .btn-cancel {
+  background-color: #f5f5f5;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-modal .btn-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.delete-modal .btn-delete {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-modal .btn-delete:hover {
+  background-color: #c82333;
+}
+

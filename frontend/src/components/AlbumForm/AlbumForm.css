@@ -123,8 +123,8 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 
 .form-group input:disabled {
@@ -163,12 +163,12 @@
 }
 
 .btn-submit {
-  background-color: #4a90e2;
+  background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
   color: white;
 }
 
 .btn-submit:hover:not(:disabled) {
-  background-color: #357abd;
+  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
 }
 
 .btn-cancel:disabled,

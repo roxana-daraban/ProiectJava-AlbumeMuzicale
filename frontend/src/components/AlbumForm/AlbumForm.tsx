@@ -229,16 +229,19 @@ const AlbumForm = ({ album, onClose, onSuccess }: AlbumFormProps) => {
 
           {/* Image URL - opțional */}
           <div className="form-group">
-            <label htmlFor="imageUrl">URL Imagine</label>
+            <label htmlFor="imageUrl">URL Imagine sau Cale Locală</label>
             <input
-              type="url"
+              type="text"
               id="imageUrl"
               name="imageUrl"
               value={formData.imageUrl}
               onChange={handleChange}
-              placeholder="https://example.com/image.jpg"
+              placeholder="/images/nume-imagine.jpg sau https://example.com/image.jpg"
               disabled={loading}
             />
+            <small style={{ color: '#666', fontSize: '12px', display: 'block', marginTop: '4px' }}>
+              Pentru imagini locale: /images/nume-imagine.jpg | Pentru URL-uri externe: https://example.com/image.jpg
+            </small>
           </div>
 
           {/* Butoane */}

@@ -8,14 +8,20 @@ import './AlbumList.css';
 /**
  * Componenta AlbumList - afișează lista de albume cu opțiuni de creare, editare și ștergere
  */
+type SortField = 'title' | 'artist' | 'year';
+type SortDirection = 'asc' | 'desc';
+
 const AlbumList = () => {
   const { user } = useAuth();
   const [albums, setAlbums] = useState<Album[]>([]);
+  const [sortedAlbums, setSortedAlbums] = useState<Album[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
   const [showForm, setShowForm] = useState(false);
   const [editingAlbum, setEditingAlbum] = useState<Album | null>(null);
-  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null); // ID-ul albumului pentru ștergere
+  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+  const [sortField, setSortField] = useState<SortField>('title');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
   useEffect(() => {
     loadAlbums();
@@ -35,6 +41,43 @@ const AlbumList = () => {
     }
   };
 
+  // Efect pentru sortare când se schimbă albums, sortField sau sortDirection
+  useEffect(() => {
+    const sorted = [...albums].sort((a, b) => {
+      let comparison = 0;
+
+      switch (sortField) {
+        case 'title':
+          comparison = (a.title || '').localeCompare(b.title || '', 'ro');
+          break;
+        case 'artist':
+          comparison = (a.artist || '').localeCompare(b.artist || '', 'ro');
+          break;
+        case 'year':
+          const yearA = a.releaseYear || 0;
+          const yearB = b.releaseYear || 0;
+          comparison = yearA - yearB;
+          break;
+        default:
+          return 0;
+      }
+
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+    setSortedAlbums(sorted);
+  }, [albums, sortField, sortDirection]);
+
+  const handleSortChange = (field: SortField) => {
+    if (sortField === field) {
+      // Dacă click pe același field, schimbăm direcția
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Dacă click pe alt field, setăm noul field cu direcție ascendentă
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
   /**
    * Normalizează rolul eliminând prefixul "ROLE_" dacă există
    */
@@ -51,9 +94,10 @@ const AlbumList = () => {
     return userRole === targetRole;
   };
 
-  // Verifică dacă user-ul poate crea albume (EDITOR sau ADMIN)
+  // Verifică dacă user-ul poate crea albume (USER, EDITOR sau ADMIN)
+  // Notă: USER are voie să creeze primul album, după care devine EDITOR automat (logica în backend)
   const canCreate = () => {
-    return hasRole('EDITOR') || hasRole('ADMIN');
+    return hasRole('USER') || hasRole('EDITOR') || hasRole('ADMIN');
   };
 
   // Verifică dacă user-ul poate edita/șterge un album specific
@@ -129,11 +173,35 @@ const AlbumList = () => {
     <div className="album-list">
       <div className="album-list-header">
         <h2>Albume Muzicale</h2>
-        {canCreate() && (
-          <button className="btn-create" onClick={handleCreateClick}>
-            + Creează Album
-          </button>
-        )}
+        <div className="header-actions">
+          {/* Butoane de sortare */}
+          <div className="sort-buttons">
+            <span className="sort-label">Sortează:</span>
+            <button
+              className={`sort-btn ${sortField === 'title' ? 'active' : ''}`}
+              onClick={() => handleSortChange('title')}
+            >
+              Titlu {sortField === 'title' && (sortDirection === 'asc' ? '↑' : '↓')}
+            </button>
+            <button
+              className={`sort-btn ${sortField === 'artist' ? 'active' : ''}`}
+              onClick={() => handleSortChange('artist')}
+            >
+              Artist {sortField === 'artist' && (sortDirection === 'asc' ? '↑' : '↓')}
+            </button>
+            <button
+              className={`sort-btn ${sortField === 'year' ? 'active' : ''}`}
+              onClick={() => handleSortChange('year')}
+            >
+              An {sortField === 'year' && (sortDirection === 'asc' ? '↑' : '↓')}
+            </button>
+          </div>
+          {canCreate() && (
+            <button className="btn-create" onClick={handleCreateClick}>
+              + Creează Album
+            </button>
+          )}
+        </div>
       </div>
 
       {error && (
@@ -199,7 +267,7 @@ const AlbumList = () => {
         </div>
       ) : (
         <div className="albums-grid">
-          {albums.map((album) => (
+          {sortedAlbums.map((album) => (
             <div key={album.id} className="album-card">
               {album.imageUrl && (
                 <img
